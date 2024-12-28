@@ -1,0 +1,427 @@
+--  Copyright 2015-2023 Carnegie Mellon University
+--  See license information in LICENSE.txt.
+
+--------------------------------------------------------------------------
+--  This is a template for a configuration file that may be used as the
+--  argument to the --config option of yaf.
+--
+--  This file is written in Lua.  For specifics of the Lua language, see
+--  http://www.lua.org/manual/5.3/manual.html#3
+--
+--  Comments in Lua start with '--' and continue to the end of the line.
+--
+--  This file must define variables 'input' and 'output'.
+--------------------------------------------------------------------------
+
+-- Remove these lines when you customize this file
+error [[You are attempting to use yaf.init without customizing it. You must remove the error statement from the beginning of the file.]]
+
+--------------------------------------------------------------------------
+-- INPUT OPTIONS
+-- The following options control where YAF will take its input from.
+-- YAF can read packets from a PCAP file or live from an interface via
+-- libpcap, libdag, libnapatech, libpfring(zc), or the netronome API.
+-- This file must define the input table.
+--
+-- The following are some examples of the various types of input
+-- YAF can take.  These variables can be uncommented and used like:
+-- input = PCAP_INPUT
+--
+-- PCAP_INPUT = {inf="en0", type="pcap"}
+-- DAG_INPUT = {inf="dag0", type="dag", export_interface=false}
+-- NAPATECH_INPUT = {inf="napa0", type="napatech", export_interface=true}
+-- NETRONOME_INPUT = {inf="net0", type="netronome"}
+-- PF_RING_INPUT = {inf="pf0", type="pfring"}
+-- ZC_INPUT = {inf="99", type="zc"}
+-- FILE_INPUT = {file="/pcaps/HTTP.pcap", type="file"}
+-- LIST_INPUT = {file="/data/mycaplist.txt", type="caplist", noerror=true}
+-- STDIN_INPUT = {file="-"}
+--
+-- Alternatively, the input options can be set using the following syntax:
+-- input.file="/Documents/mypcapfile.pcap"
+-- input.noerror = true
+--
+-- Acceptable keys are {inf, type, export_interface, file, noerror,
+--                      force_read_all}
+--
+-- Acceptable types are "pcap", "dag", "napatech", "netronome", "pfring",
+-- "zc", "file", and "caplist".  The default type is "file".
+--
+-- export_interface, force_read_all, and noerror expect
+-- boolean values: true or false.
+--------------------------------------------------------------------------
+
+LIST_INPUT = {file = "/tmp/caplist.txt", type="caplist", noerror=true}
+input = LIST_INPUT
+
+--------------------------------------------------------------------------
+-- OUTPUT OPTIONS
+-- The following options control where YAF will send its output. YAF writes
+-- flows to an IPFIX file or exports flow to an IPFIX collector over
+-- TCP, UDP, or SCTP.
+-- This file must define the output table.
+--
+-- The following are some examples of the various types of output
+-- YAF can export.  These variables can be uncommented and used like:
+-- output = TCP_LOCAL_EXPORT
+--
+-- FILE_EXPORT = {file="/data/myyaffile.yaf"}
+-- ROTATE_EXPORT = {file="/data/yaf/yaf", rotate=200, lock=true}
+-- TCP_LOCAL_EXPORT = {host = "localhost", port = "18000", protocol="tcp"}
+-- UDP_LOCAL_EXPORT = {host = "localhost", port = "18001", protocol="udp",
+--                     udp_temp_timeout=600}
+-- STDOUT_EXPORT = {file = "-"}
+--
+-- Acceptable keys are {file, host, port, protocol,
+--                      rotate, lock, udp_temp_timeout}
+-- Note: The argument to port is a string, not a number.
+-- Acceptable protocols are "tcp", "udp", and "sctp"
+--
+--------------------------------------------------------------------------
+TCP_LOCAL_EXPORT = {host = "localhost", port = "18000", protocol="tcp"}
+output = TCP_LOCAL_EXPORT
+
+
+--------------------------------------------------------------------------
+-- DECODE OPTIONS
+-- The following options are used to modify the YAF packet decoder's behavior.
+-- None of these options are required.
+-- decode expects a table containing one or more of the following keys
+-- set to true or false.
+-- By default, all of the below features are turned off.
+--
+-- Acceptable keys are {gre, vxlan, geneve, ip4_only, ip6_only, no_frag}
+--
+-- DECODE_OPTIONS = {gre=true, vxlan=true, geneve=true, ip4_only=true, ip6_only=true, nofrag=true}
+--
+--------------------------------------------------------------------------
+decode = {gre = false, vxlan = false, geneve = false, ip4_only = false, ip6_only = false, nofrag = false}
+
+--------------------------------------------------------------------------
+-- vxlan_ports = {INTEGER, INTEGER, ...}
+-- The ports used to decode VxLAN packets. Ignored if VxLAN decoding is
+-- not enabled.  Use 'decode { vxlan = true }' to enable.
+-- Integers between 0 and 65535 inclusive. Default is 4789.
+--------------------------------------------------------------------------
+-- vxlan_ports = {4789, 4788}
+
+--------------------------------------------------------------------------
+-- geneve_ports = {INTEGER, INTEGER, ...}
+-- The ports used to decode Geneve packets. Ignored if Geneve decoding is
+-- not enabled.  Use 'decode { geneve = true }' to enable.
+-- Integers between 0 and 65535 inclusive.  Default is 6081.
+--------------------------------------------------------------------------
+-- geneve_ports = {6081, 6080}
+
+--------------------------------------------------------------------------
+-- EXPORT OPTIONS
+-- These options are used to modify the data exported by YAF
+-- None of these options are required.
+-- export expects a table containing one or more of the following keys set
+-- to true or false.  By default, all of the below features are turned off.
+--
+-- Available keys are {silk, uniflow, force_ip6, flow_stats, delta, mac}
+--
+-- EXPORT_OPTIONS = {silk=true, uniflow=true, force_ip6=true,
+--                   flow_stats=true, delta=true, mac=true}
+--------------------------------------------------------------------------
+export = {silk = true}
+
+--------------------------------------------------------------------------
+-- idle_timeout = IDLE_TIMEOUT (integer)
+-- Set flow idle timeout in seconds.  Default is 300 seconds (5 min)
+-- Setting IDLE_TIMEOUT to 0 creates a flow for each packet.
+--------------------------------------------------------------------------
+-- idle_timeout =
+
+--------------------------------------------------------------------------
+-- active_timeout = ACTIVE_TIMEOUT (integer)
+-- Set flow active timeout in seconds.  Default is 1800 seconds (30 min)
+--------------------------------------------------------------------------
+-- active_timeout =
+
+--------------------------------------------------------------------------
+-- filter = BPF_FILTER
+-- Set Berkeley Packet Filtering (BPF) in YAF with BPF_FILTER.
+--------------------------------------------------------------------------
+-- filter = "port 53"
+
+--------------------------------------------------------------------------
+-- APPLICATION LABELING AND DEEP PACKET INSPECTION OPTIONS
+-- Turn on application labeling by setting applabel = true
+-- Turn on deep packet inspection by setting dpi = true
+-- Read the application labeler/DPI rules file from dpi_rules=
+-- If dpi_rules is not set, uses the default location
+--------------------------------------------------------------------------
+applabel = true
+dpi = true
+-- dpi_rules = "/usr/local/etc/yafDPIRules.conf"
+
+--------------------------------------------------------------------------
+-- maxpayload = PAYLOAD_OCTETS (integer)
+-- Capture at most PAYLOAD_OCTETS octets from the start of each direction
+-- of each flow.  Default is 0.
+--------------------------------------------------------------------------
+maxpayload = 1024
+
+--------------------------------------------------------------------------
+-- maxexport = MAX_PAY_OCTETS (integer)
+-- Export at most MAX_PAY_OCTETS octets from the start of each direction
+-- of each flow from the PAYLOAD_OCTETS given to maxpayload.
+-- Default is PAYLOAD_OCTETS if export_payload=true
+--------------------------------------------------------------------------
+-- maxexport = maxpayload
+
+--------------------------------------------------------------------------
+-- export_payload = true/false
+-- If true, export the first N bytes of payload from each direction of
+-- the flow, where N is the minimum of PAYLOAD_OCTETS (maxpayload) or
+-- MAX_PAY_OCTETS (maxexport). See also export_payload_applabels.
+-- Default is false.
+--------------------------------------------------------------------------
+export_payload = false
+
+--------------------------------------------------------------------------
+-- export_payload_applabels = {INTEGER, INTEGER, ...}
+-- If set, payload export is enabled (as with export_payload) but only
+-- for the silkAppLabel values in the list.  The value must be a list of
+-- integers between 0 and 65535 inclusive.  Default is not set.
+--
+-- To see payload only for unknown applabels:
+--     export_payload_applabels = { 0 }
+--------------------------------------------------------------------------
+-- export_payload_applabels = {25, 80}
+
+--------------------------------------------------------------------------
+-- udp_payload = true/false
+-- If true, capture payload from all packets in a UDP flow.  If false (the
+-- default), capture data from only the first packet in non-TCP flows.  The
+-- maximum payload to capture is PAYLOAD_OCTETS as set by maxpayload.
+--------------------------------------------------------------------------
+-- udp_payload =
+
+--------------------------------------------------------------------------
+-- stats = INTERVAL (integer)
+-- If present, yaf will export process statistics every INTERVAL seconds.
+-- If stats is set to 0, no stats records will be exported.
+-- default is 300
+--------------------------------------------------------------------------
+-- stats =
+
+--------------------------------------------------------------------------
+-- no_tombstone = true/false
+-- If true, tombstone records will not be sent.
+-- default is false.
+--------------------------------------------------------------------------
+-- no_tombstone =
+
+--------------------------------------------------------------------------
+-- tombstone_configured_id = TOMBSTONE_IDENTIFIER (integer)
+-- Set the configured identifier for tombstone records generated by YAF.
+-- default is 0
+--------------------------------------------------------------------------
+-- tombstone_configured_id =
+
+--------------------------------------------------------------------------
+-- no_element_metadata = true/false
+-- If true, element metadata (RFC5610 records) will not be sent.
+-- default is false.
+--------------------------------------------------------------------------
+-- no_element_metadata =
+
+--------------------------------------------------------------------------
+-- no_template_metadata = true/false
+-- If true, template metadata (name, description, other information) will
+-- not be sent
+-- default is false.
+--------------------------------------------------------------------------
+-- no_template_metadata =
+
+--------------------------------------------------------------------------
+-- ingress = ingressInterface (integer)
+-- egress = egressInterface (integer)
+-- use the above options to manually set the ingressInterface or
+-- egressInterface in the exported flow record. Default is 0.
+--------------------------------------------------------------------------
+-- ingress =
+-- egress =
+
+--------------------------------------------------------------------------
+-- obdomain = DOMAIN_ID (integer)
+-- Set the othe observationDomainID on each exported IPFIX message to
+-- DOMAIN_ID.  Default is 0.
+--------------------------------------------------------------------------
+-- obdomain =
+
+--------------------------------------------------------------------------
+-- maxflows = FLOW_TABLE_MAX (integer)
+-- Limit the number of open flows to FLOW_TABLE_MAX. Default is no limit.
+--------------------------------------------------------------------------
+-- maxflows =
+
+--------------------------------------------------------------------------
+-- maxfrags = FRAG_TABLE_MAX (integer)
+-- Limit the number of fragments to FRAG_TABLE_MAX. Default is no limit.
+--------------------------------------------------------------------------
+-- maxfrags =
+
+--------------------------------------------------------------------------
+-- udp_uniflow = PORT (integer)
+-- If set, export each UDP packet on the given PORT (or 1 for all ports)
+-- as a single flow. Default is 0 (off).
+--------------------------------------------------------------------------
+-- udp_uniflow = 0
+
+--------------------------------------------------------------------------
+-- MPLS support
+-- If YAF is built with MPLS support, MPLS labels are used when determining
+-- flow records and the MPLS elements are present in the exported templates
+-- and records. To disable use of MPLS labels and export of MPLS elements,
+-- set no_mpls to true.  The value is ignored if YAF was built without MPLS
+-- support.
+--------------------------------------------------------------------------
+-- no_mpls = false
+
+--------------------------------------------------------------------------
+-- Passive OS Fingerprinting (p0f) OPTIONS
+-- p0fprint = true/false
+-- p0f_fingerprints = "/usr/local/etc/p0f.fp"
+-- fpexport = true/false
+-- See the yaf man page for more information. YAF must be configured
+-- appropriately to use the following options.
+--------------------------------------------------------------------------
+-- p0fprint = true
+-- fpexport = true
+-- p0f_fingerprints = "/usr/local/etc/p0f.fp"
+
+--------------------------------------------------------------------------
+-- nDPI OPTIONS
+-- ndpi = true/false
+-- ndpi_proto_file = "PATH"
+-- See the yaf man page for more information. YAF must be configured
+-- appropriately to use the following options.
+--------------------------------------------------------------------------
+-- ndpi = true
+-- ndpi_proto_file = "LOCATION"
+
+--------------------------------------------------------------------------
+-- PLUGIN OPTIONS
+-- Specify the plugin for YAF to load.  See the yaf and yafdhcp man
+-- pages for more information about plugins and the available plugin.
+--
+-- Each plugin table has the available keys {name, options, conf}
+--
+-- SAMPLE_PLUGIN = {
+--   -- The "name" keyword specifies the full path to the plugin
+--   -- library name to load.
+--   name = "/usr/local/lib/yaf/sample.la",
+--
+--   -- The "options" keyword specifies the arguments given to the
+--   -- plugin, if necessary.
+--   options = "53",
+--
+--   -- The "conf" keyword specifies the path to a configuration
+--   -- file to be given to the plugin, if required.
+--   conf = "/usr/local/etc/sample.conf"}
+--
+-- There is one plugin that is distributed with YAF.  You can uncomment
+-- the following variable DHCP_PLUGIN and use like:
+-- plugin = {DHCP_PLUGIN}
+--
+-- DHCP_PLUGIN = {name = "/usr/local/lib/yaf/dhcp_fp_plugin.la"}
+
+--------------------------------------------------------------------------
+-- plugin = {DHCP_PLUGIN}
+
+--------------------------------------------------------------------------
+-- PCAP OPTIONS
+-- The following table will configure YAF's PCAP export capability.
+--
+-- Example:
+-- PCAP_EXPORT = {path = "/data/pcap/yafpcap", maxpcap=25, pcap_timer=300,
+--                meta="/data/meta/yafmeta"}
+-- pcap = PCAP_EXPORT
+--
+-- Available keys are {path, maxpcap, pcap_timer, meta}
+-- See the YAF man page for more information about setting these options
+--------------------------------------------------------------------------
+PCAP_EXPORT = {path = "/tmp/pcap", maxpcap=25, pcap_timer=300, meta="/tmp/meta"}
+--pcap = PCAP_EXPORT
+
+--------------------------------------------------------------------------
+-- TLS OPTIONS
+-- Specify the various files to use TLS to secure the connection to the
+-- IPFIX collector.
+-- Example:
+-- tls = {ca="ca_pem_file", cert="cert_pem_file", key="key_pem_file"}
+--
+-- See the YAF man page for more information
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+-- LOGGING OPTIONS
+-- These options are used to specify how log messages are routed.
+-- Available keys are {spec, level}
+--
+-- spec may be set to a syslog facility name, stderr, or the absolute
+-- path to a file for file logging.  Default is stderr.
+--
+-- level can be set to "quiet", "error", "critical", "warning", "message",
+-- and "debug".  The default logging level is "warning".
+--
+-- Example:
+--
+-- log = {spec = "/var/log/yaf.log", level = "debug"}
+--------------------------------------------------------------------------
+--log = {spec = "/tmp/yaflog.log", level="debug"}
+
+
+--------------------------------------------------------------------------
+--  DISTRIBUTION STATEMENT
+--  @DISTRIBUTION_STATEMENT_BEGIN@
+--  YAF 3.0.0
+--
+--  Copyright 2023 Carnegie Mellon University.
+--
+--  NO WARRANTY. THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING
+--  INSTITUTE MATERIAL IS FURNISHED ON AN "AS-IS" BASIS. CARNEGIE MELLON
+--  UNIVERSITY MAKES NO WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+--  AS TO ANY MATTER INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR
+--  PURPOSE OR MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF
+--  THE MATERIAL. CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF
+--  ANY KIND WITH RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT
+--  INFRINGEMENT.
+--
+--  Licensed under a GNU GPL 2.0-style license, please see LICENSE.txt or
+--  contact permission@sei.cmu.edu for full terms.
+--
+--  [DISTRIBUTION STATEMENT A] This material has been approved for public
+--  release and unlimited distribution.  Please see Copyright notice for
+--  non-US Government use and distribution.
+--
+--  GOVERNMENT PURPOSE RIGHTS – Software and Software Documentation
+--  Contract No.: FA8702-15-D-0002
+--  Contractor Name: Carnegie Mellon University
+--  Contractor Address: 4500 Fifth Avenue, Pittsburgh, PA 15213
+--
+--  The Government's rights to use, modify, reproduce, release, perform,
+--  display, or disclose this software are restricted by paragraph (b)(2) of
+--  the Rights in Noncommercial Computer Software and Noncommercial Computer
+--  Software Documentation clause contained in the above identified
+--  contract. No restrictions apply after the expiration date shown
+--  above. Any reproduction of the software or portions thereof marked with
+--  this legend must also reproduce the markings.
+--
+--  This Software includes and/or makes use of Third-Party Software each
+--  subject to its own license.
+--
+--  DM23-2317
+--  @DISTRIBUTION_STATEMENT_END@
+--------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+-- Local Variables:
+-- mode:lua
+-- indent-tabs-mode:nil
+-- fill-column:78
+-- End:

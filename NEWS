@@ -1,0 +1,731 @@
+Version 3.0.0.alpha4: 2023-12-21
+================================
+
+Added the ability to decode VxLAN-encapsulated packets, Geneve-encapsulated packets, and Geneve-encapsulated VxLAN-encapsulated packets.
+
+Added a --no-mpls option to disable export of MPLS labels when YAF has been built with MPLS support.
+
+Fixed TLS certificate parsing to be more selective on which values are stored in the list of sslObjectType-sslObjectValue pairs.
+
+Version 2.15.0: 2023-12-21
+==========================
+
+Enhanced the deep packet inspection capabilities for SSH connections to include negotiated algorithms and HASSH hash.
+
+Added the JA3 hash to the DPI for TLS connections.
+
+Added support for reading VxLAN-encapsulated packets, Geneve-encapsulated packets, and Geneve-encapsulated VxLAN-encapsulated packets.
+
+Fixed TLS certificate parsing to be more selective on which values are stored in the list of sslObjectType-sslObjectValue pairs.
+
+Fixed a potential bug in the Shannon entropy calculation that may cause small differences in calculated values.
+
+Version 3.0.0.alpha3: 2023-07-18
+================================
+
+Changed DNS deep packet inspection to produce names and text records with escape codes for special characters (non-ASCII, non-printable, special whitespace, and label-internal dots in names).
+
+Made DNS deep packet inspection more strict about parsing malformed DNS Resource Records across RR boundaries within the packet.
+
+Enhanced the --time and --etime options of yafMeta2Pcap to accept a human-readable timestamp in addition to milliseconds.
+
+Changed the destination of --version output to the standard output.
+
+Changed yaf to only export the fingerprint-related elements (firstPacketBanner, etc) when the --fpexport option is given.  (Requires YAF to be built with --enable-fpexporter.)
+
+Changed yaf to only export the p0f-related elements (osName, etc) when the --p0fprint option is given.  (Requires YAF to be built with --with-p0f.)
+
+Fixed a crash in YAF that occurs when it is built with GLib 2.75.3 or newer.
+
+Version 2.14.0: 2023-03-23
+==========================
+
+Changed DNS deep packet inspection to produce names and text records with escape codes for special characters (non-ASCII, non-printable, special whitespace, and label-internal dots in names).
+
+Made DNS deep packet inspection more strict about parsing malformed DNS Resource Records across RR boundaries within the packet.
+
+Changed destination of --version output to the standard output.
+
+Fixed a crash in YAF that occurs when it is built with GLib 2.75.3 or newer.
+
+Version 3.0.0.alpha2: 2023-02-09
+================================
+
+Enhanced the deep packet inspection capabilities for SSH connections to include negotiated algorithms and HASSH hash.
+
+Added the JA3 hash to the DPI for TLS connections.
+
+Made several changes to the yafDPIRules.conf file for applabels written as C plugins: Allow the user to disable the export of arbitrary DPI elements and SMTP headers. Allow a protocol to be specified. Moved the regex definitions from C to yafDPIRules.conf.
+
+Increased the maximum payload that YAF may capture for performing DPI.
+
+Fixed a potential bug in the Shannon entropy calculation that may cause small differences in calculated values.
+
+Version 2.13.0: 2023-02-09
+==========================
+
+Added ability for yaf to limit payload export to a named set of applabels.
+
+Increased the maximum payload that YAF may capture for performing DPI.
+
+Added support for recent releases of nDPI.
+
+Added yaf.init to the list of installed files.
+
+Stopped export of full flow template that is never used for data records.
+
+Fixed minor bug in --version where Compact IPv4 support always reported NO.
+
+Fixed bugs in regular expressions for nntpResponseRegex and smtpURLRegex.
+
+Version 3.0.0.alpha1: 2022-02-28
+================================
+
+Merged the configuration files yafApplabelRules.conf and yafDPIRules.conf into a single file written in Lua. Previous versions of those files will not work with this version of yaf.
+
+Changed Deep Packet Inspection (DPI) support to be compiled into yaf when requested by configure; it is no longer a plug-in. Run configure with --enable-dpi to enable the capability; run yaf with --dpi to use it. Specifying --dpi enables application labeling; it is no longer necessary to explicitly specify --applabel when enabling DPI.
+
+Changed yaf to export metadata about information elements and templates by default: both as compile-time and run-time options. To disable on an invocation, run yaf with the --no-element-metadata and/or --no-template-metadata switches. To disable support entirely, pass --disable-metadata-export to configure. (Note that super_mediator-2.0.0 works best with template metadata enabled.)
+
+Updated yaf to use the enhanced template metadata available in libfixbuf-3.0.0.  This allows yaf to declare that it only uses some templates within sub-records (that is, within a subTemplateList or subTemplateMultiList).  The metadata also describes the information element yaf uses in its basicLists.
+
+Added the yaf command line option --payload-applabel-select to enable exporting payload data for only selected appLabel values.
+
+Updated the regular expressions used for application-labeling.
+
+Changed numerous aspects of the DPI data.
+
+Updated, rearranged, and fixed bugs in SMTP DPI.
+
+Added fields for more DNSSEC values and fixed other bugs in DNS DPI.
+
+Renamed the configure option --enable-p0fprinter to --with-p0f.
+
+Renamed the configure option --enable-ndpi to --with-ndpi.
+
+Fixed bugs in POP3 DPI.
+
+Removed support for the Spread toolkit.
+
+Removed support for the popt options parser.
+
+Updated fixbuf requirement to libfixbuf-3.0.0.
+
+Version 2.12.2: 2021-10-14
+==========================
+
+Added new protocols to the yafAppLabelRules.conf file and updated several regular expressions.
+
+Changed the regexes used by the SMTP DPI plugin and improved capture when multiple messages appear in a single SMTP session.
+
+Fixed a crash in the SMTP DPI plugin when reading uniflow records.
+
+Updated the POP3 DPI plugin.
+
+Updated yafzcbalance to be compatibile with PF_Ring-8.
+
+Version 2.11.3: 2021-10-14
+==========================
+
+Added new protocols to the yafAppLabelRules.conf file and updated several regular expressions.
+
+Updated the SMTP regexes used in the yafDPIRules.conf file to be similar to those used by the smtpplugin in YAF 2.12.2.
+
+Updated yafzcbalance to be compatibile with PF_Ring-8.
+
+Note: The yafAppLabelRules.conf file yafDPIRules.conf files in this release are usuable in prior releases of YAF also.
+
+Version 2.12.1: 2020-12-22
+==========================
+
+Changed the templates and IEs used for SMTP DPI.  The new templates use different IDs than those used by previous releases of YAF.  super_mediator-1.8.0 or later is required to read this format.  Currently there is no version of Analysis Pipeline that reads the SMTP DPI.
+
+First public release of YAF 2.12.x.
+
+Version 2.11.2: 2020-11-20
+==========================
+
+Corrected the patch to allow building with PF_Ring.
+
+Version 2.11.1: 2020-11-19
+==========================
+
+Fixed bugs in NTP and DNS deep packet inspection.
+
+Fixed a compilation error when building with metadata export enabled.
+
+Fixed possible compilation errors when building with nDPI support.
+
+Fixed compilation errors when building with newer versions of PF_Ring.
+
+Version 2.11.0: 2019-03-18
+==========================
+
+Support for libfixbuf 2.3.0 added, and is now required.
+
+Added support for nDPI 2.0.
+
+CERT Info Model support added.
+
+More strict DNS applabel.
+
+Initial NTP Mode 7 applabel support.
+
+Improved POSIX compliance for init script.
+
+Removed ipfixDump; it is now distributed with libfixbuf.
+
+DNS DPI free segfault fix.
+
+New YAF stats and tombstone format.
+
+Version 2.10.0: 2018-04-30
+==========================
+
+Support for libfixbuf 2.0.0 added, and is now required.
+
+Derive information elements from included XML files.
+
+Various reporting/output bug fixes for ipfixDump.
+
+Support for tombstone records added.
+
+Version 2.9.3: 2017-12-21
+==========================
+
+Fixed configure-time dependency for libndpi to limit use of v1.8.0 and greater.
+
+Modified init script to give YAF more time to shut down gracefully.
+
+Version 2.9.2: 2017-11-08
+==========================
+
+Fixed configure-time bug when using libfixbuf 1.7.1 (or earlier) and p0fprinter
+
+Version 2.9.1: 2017-11-02
+==========================
+
+Fixed bug that could corrupt flow emitted to standard output
+
+Version 2.9.0: 2017-10-19
+==========================
+
+nDPI library support added
+
+Added NTP applabel
+
+Added RFC5610 template metadata (name and description) record output (libfixbuf 1.8.0 or greater required).
+
+Add option --no-vlan-in-key to drop VLAN ID from hash calculation
+
+Minor Bug Fixes
+
+Version 2.8.4: 2016-04-14
+=========================
+
+Fix incompatibility with older versions of libpcap introduced in 2.8.3
+
+Version 2.8.3: 2016-04-12
+=========================
+
+Important bug fix for versions 2.8.x.  Fixes a bug in decoding specific TCP Options headers.
+
+Version 2.8.2: 2016-04-05
+=========================
+
+Fix application labeling bug introduced in 2.8.0 which incorrectly labels particular REGEX labels
+
+Other Bug Fixes
+
+Version 2.8.1: 2016-02-04
+==========================
+
+Fix compile error when configured with --disable-payload
+
+Force buffer emit with IPFIX Options record when inactive 
+
+
+Version 2.8.0: 2015-12-22
+==========================
+
+Remove support for fixbuf releases prior to libfixbuf-1.7.0
+
+PF_RING support
+
+PF_RING ZC (Zero Copy) support
+
+Add support for gzip'd PCAP files
+
+Add support for decoding MPTCP headers and exporting MPTCP information
+
+Add LUA configuration file for yaf startup
+
+New SSL Server Name field export from TLS/SSL Client Hello
+
+New option for exporting entire X.509 Certificate
+
+Add Fragment flag to flowAttributes to signify that a flow contained fragmented packets
+
+DHCP fingerprinting plugin now exports basic list of options by default
+
+ipfixDump prints number of records for each template
+
+Bug Fix for labeling DNS over TCP
+
+Bug Fix for reverseFlowDeltaMilliseconds field
+
+Bug Fix for collecting X.509 Certificates through a proxy
+
+More detailed information about ignored packets on termination/SIGUSR1
+
+Version 2.7.1: 2015-01-27
+=========================
+
+Fix a bug with --flow-stats in particular configurations
+
+Version 2.7.0: 2015-01-07
+=======================
+
+New Gh0st RAT Application Label
+
+New NetBIOS Datagram Service Application Label
+
+yafMeta2Pcap can now accept IPFIX input
+
+getFlowKeyHash now exports IPFIX
+
+Support for indexing PCAPNG files
+
+New YAF option --no-output to produce no IPFIX output
+
+New YAF options --hash and --stime to search for a single flow with the given hash and start time
+
+DNS DPI now exports query section of resource record for all responses with nonzero RCODE
+
+Faster searching of pcap-meta files
+
+Implement SAME_SIZE flag for TCP flows
+
+Minor Bug Fixes
+
+Version 2.6.0: 2014-09-03
+=================
+
+Added a new tool, ipfixDump, to read and dump the contents of IPFIX files. Requires Fixbuf 1.4.0 or later.
+
+Add LDAP application label
+
+Filedaemon can now move files from one directory to another without passing to a child program
+
+SSL/TLS DPI modification to capture SSL record version
+
+Update CERT PEN Information Elements to use full information model if Fixbuf 1.4.0 or later is available
+
+Fix for Modbus application label to reduce false positives
+
+Bug Fix for TOS field when running with --uniflow
+
+Bug Fix in RPM spec file
+
+Bug Fix for labeling malformed DNS packets
+
+Bug Fix for processing out of order packets with --force-read-all
+
+Bug Fix for exporting reverse payload
+
+Other minor bug fixes
+
+Version 2.5.0: 2014-03-04
+=======================
+
+Bug Fix for indexing rolling pcap files
+
+Added MPLS flow hashing and label export
+
+Add option for yafMeta2Pcap to take a list of pcap files
+
+Non-IP flow data can be exported in MPLS mode
+
+Added Napatech 3GD support
+
+Added Netronome support
+
+Added DNP3 application labeling and configurable DPI
+
+Added Modbus application labeling and configurable DPI
+
+Added Ethernet/IP application labeling and configurable DPI
+
+YAF DPI plugin now exports RTP Payload Type
+
+Added compile time option to enable local-time logging
+
+New Bittorrent application label
+
+Added Daemonizing capability within YAF
+
+Added option to disable promiscuous mode on device
+
+Added LDP application label for MPLS support
+
+Added Juniper Ethernet (DLT_JUNIPER_ETHER) link layer support
+
+getFlowKeyHash can now accept IPFIX input
+
+Interface recording is now enabled by default for capture cards
+
+Bug Fix for pcap-per-flow option
+
+Type of Service Field now exported
+
+
+Version 2.4.0: 2013-05-03
+=========================
+
+New HTTP DPI Fields
+
+Updated DPI Elements
+
+Bug Fix to not replace yaf.conf on install
+
+New application label: VMware server console
+
+Added support to decode ERSPAN headers
+
+Drop statistics are updated when statistics messages are exported
+
+yafcollect bug fix
+
+Other Bug Fixes
+
+Version 2.3.3: 2013-01-30
+=========================
+
+init.d script improvements
+
+Allow yafmeta2pcap to accept multiple files
+
+Report drop statistics on SigUsr1
+
+Bug Fixes
+
+Version 2.3.2: 2012-09-14
+=========================
+
+Bug Fix to maintain compatibility with older versions of GLib and libpcap
+
+Version 2.3.1: 2012-09-10
+=========================
+
+DPI Improvements
+
+Additional Pcap Export Option --index-pcap
+
+Add option to manually set ingress/egress interface fields
+
+Add tool to create pcap from pcap metafile
+
+Bug Fixes
+
+Version 2.3.0: 2012-07-31
+=========================
+
+Added DHCP Fingerprinting Capability
+
+Added ability to export DNSSEC information
+
+Significant X.509 Certificate Capture and Export Enhancements
+
+Added Bivio Interface Labeling
+
+DPI Improvements
+
+Added Enhanced Flow Attributes and Statistics Export
+
+Added ability to index PCAP file
+
+Added New Application Labels: MGCP, MEGACO
+
+Bug Fixes
+
+Version 2.2.2: 2012-03-30
+=========================
+
+Bug Fix for Vlan Tagging
+
+Version 2.2.1: 2012-03-08
+==========================
+
+Bug Fixes
+
+Version 2.2.0: 2012-02-29
+============================
+
+New Application Labels (MSNP, RTP, RTCP, Jabber)
+
+Rolling Pcap output and pcap-per-flow options.
+
+CERT p0f Fingerprints (https://tools.netsa.cert.org/p0f/libp0f.html) included.
+
+New option to process out-of-sequence flows.
+
+Several other bug fixes.
+
+Version 2.1.2: 2011-09-23
+=============================
+
+Added new --plugin-conf switch for adding a configuration file to a plugin
+
+Added new --p0f-fingerprints switch to give location of p0f fingerprint files
+
+Bug Fixes
+
+Version 2.1.1: 2011-08-11
+=============================
+
+Important bug fix for application labeling SSL plugin
+
+Version 2.1.0: 2011-07-27
+=============================
+
+New Information Element exported in every flow record, flowAttributes (CERT PEN 6871, IE 40).
+
+YAF now checks if a flow has fixed-size packets and exports this flag using the new flowAttributes Information Element.  See the YAF man page for details.
+
+Reset Application Label on UDP-uniflows for Deep Packet Inspection
+
+Fixed yafscii invalid parameter bug that may have existed on certain platforms
+
+Added VNC (RFB Protocol) application label
+
+DPI Enhancements
+
+FlowEndReason IPFIX field is now set to 31 for udp-uniflows
+
+For Cygwin: Added support for getting the yaf config directory via the Windows Registry
+
+Several other bug fixes
+
+Version 2.0.2: 2011-06-13
+==============================
+
+Improvements with Reassembly of TCP Fragments.
+
+Bug Fix for DNS Deep Packet Inspection.
+
+--no-frag switch now works.
+
+Bug Fix for expiring flows that exceed the idle timeout when reading from a file.
+
+Added the ability to configure YAF with WinPCAP.
+
+Version 2.0.1: 2011-05-23
+==============================
+
+Bug Fix for compile error with --enable-daginterface
+
+Enhancement for SNMPv3 application labeler
+
+Version 2.0.0: 2011-04-28
+==============================
+
+This version requires libfixbuf-1.0.0 or greater.
+
+Added Napatech Adapter Integration (requires libpcapexpress).
+
+YAF now exports TCP, payload, finger printing, p0f, MAC, entropy, and DPI flow information within an IPFIX subTemplateMultiList data type. 
+
+Added the ability to export YAF capture statistics using IPFIX Options Templates.
+
+The --stats or --no-stats were added to configure YAF stats output.
+
+Added the ability to define Spread group types to use Spread as a manifold for flow export based on application, port, protocol, version, or vlan.
+
+Added New Application Labels: DHCP, AIM, SOCKS, SMB, SNMP, NETBIOS.
+
+Added a time-out buffer flush function.
+
+Added SSL Certificate Capture.
+
+Added DNS Resource Record Parsing.
+
+Added Deep Packet Inspection for the MySQL protocol.
+
+The --silk switch will maintain compatibility with SiLK by not nesting TCP information in the subTemplateMultiList data type. 
+
+Deep Packet Inspection elements are read from one configuration file.
+
+Added the ability to create new DPI elements from configuration file.
+
+Added UDP Export and Template Retransmission.
+
+Many Bug fixes and other enhancements.
+
+Version 1.3.2: 2011-02-03
+=============================
+
+Bug fix for dnsplugin.c
+
+Minor bug fix for fingerprint exporting.
+
+Version 1.3.1: 2010-10-06
+==============================
+
+Important bug fix for p0f or fpexport enabled code.
+
+Fixed bug in DNS Application Labeling Decoder.
+
+Removed machine learning code for future work.
+
+Version 1.3.0: 2010-09-20
+===============================
+
+Vlan tags are now a part of the flow key.
+
+Vlan tags are now always exported.
+
+--mac flag exports MAC addresses.
+
+Fixed bug in DNS Application Labeling Decoder.
+
+Fixed bug in libp0f Makefile.
+
+Added --print-header switch to yafscii for use with tabular mode to print column headers.
+
+Added --mac switch to yafscii to support printing of MAC addresses in tabular mode.
+
+Version 1.2.0: 2010-07-27
+===============================
+
+Spread support has been added into libfixbuf and YAF to allow publish subscribe distribution of YAF sensor output.
+
+Plugin support has returned to YAF to support basic deep packet inspection (DPI) and application labeling (see the yafdpi manual page).
+
+Added 9 new protocols to the application labeling feature (see the applabel manual page).
+
+Added ability for signature detection through the application labeling mechanism.
+
+Added --udp-uniflow switch to capture each UDP packet on a set port and export the payload (for DNS dissector creation).
+
+Added --udp-payload to concatenate and export payload up to the max-payload value.
+
+DNS DPI can be restricted to Authoritative and NXDomain responses only via compile switches.
+
+Enhanced payload capture for TCP streams with out-of-order SYN packets.
+
+Fixed a bug in processing small (less than 64-packets) PCAP files.
+
+Fixed IPv6 header options bug.
+
+Fixed bug in parsing capability for strings longer than 80 columns.
+
+Added p0f passive OS labeling capability from community (https://tools.netsa.cert.org/p0f/libp0f.html).
+
+Added Berkley Packet Filtering (BPF) switch --filter.
+
+Version 1.0.0.2: 2009-03-18
+===============================
+
+Fix to the --rotate switch so that it actually works.
+
+Added the --noerror switch so that when a caplist set
+of PCAP files are processed, all files will be attempted
+even if there is a malformed PCAP in the middle of the list.
+
+Added the --dag-interface switch (along with configure option
+--enable-daginterfaces) that will record the physical interface
+a packet arrived on in the flow table.
+
+
+Version 1.0.0: 2008-09-09
+================================
+
+Airframe has now been merged into YAF and does not need
+to be separately installed.
+
+Fixes to the configure system to allow external pcap libraries,
+(Bivio, nPulse, DAG) have been fixed.
+
+The packet decoder system has been rewritten in order to allow
+multithreading in the future.
+
+Version 0.8.0: 2008-01-18
+================================
+
+Add experimental packet classifier support to YAF.
+
+Experimental plugin support has been removed.
+
+Version 0.7.2: 2007-11-30
+================================
+
+Add experimental YAF plugin support.
+
+Version 0.7.1: 2007-08-29
+==============================
+
+Add ability to decode PPP and PPPoE headers.
+
+Add experimental startup script in etc/. 
+
+Fix --lock option bug; change --rotate file naming to minimize collision.
+
+Version 0.7.0: 2007-08-15
+==============================
+
+Complete rewrite of YAF's main loop for simplicity and performance.
+Input and output command-line configuration options have changed, and some
+features are no longer available; see the yaf(1) manpage for details.
+
+Complete rewrite of the packet decoder and fragment reassembler for
+IPv6 flow assembly and for future flexibility.
+
+Add ability to decode IPv6 headers and create IPv6 flows.
+
+Version 0.6.0: 2007-05-17
+===========================
+
+Add tabular output to yafscii.
+
+Add ability to decode IP over C-HDLC and GRE.
+
+Update to fixbuf 0.6.0 API.
+
+Add ability to export via IPFIX over TLS and IPFIX over SCTP.
+
+Various bugfixes.
+
+Version 0.5.0: 2006-09-29
+=================================
+
+Add Endace DAG capture support.
+
+Add ability to drop privileges during live capture.
+
+Add ability to decode (but not export) MPLS information.
+
+Update to fixbuf 0.5.0 API.
+
+Numerous internal performance and reliability enhancements. 
+
+Version 0.1.6: 2006-07-07
+===========================
+
+Add ability to process pcap trace files (those containing headers only, 
+and not full packet payload).
+
+Add ability to decode 802.1q VLAN headers, and to export VLAN tags.
+
+Fix bugs in yafscii I/O handling that led to instability on close.
+
+Version 0.1.5: 2006-06-16
+============================
+
+Changes to template handling for 0.4.0 libfixbuf release; 
+documentation tweaks; new --observation-domain option to set 
+observationDomainId on exported messages.
+
+Version 0.1.0: 2006-03-28
+=============================
+
+Initial public release of YAF. YAF is presently alpha-quality software.

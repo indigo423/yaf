@@ -1,0 +1,226 @@
+##  filedaemon manual page   -*- mode: text; fill-column: 78 -*-
+##
+##  @DISTRIBUTION_STATEMENT_BEGIN@
+##  YAF 3.0.0
+##
+##  Copyright 2023 Carnegie Mellon University.
+##
+##  NO WARRANTY. THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING
+##  INSTITUTE MATERIAL IS FURNISHED ON AN "AS-IS" BASIS. CARNEGIE MELLON
+##  UNIVERSITY MAKES NO WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+##  AS TO ANY MATTER INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR
+##  PURPOSE OR MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF
+##  THE MATERIAL. CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF
+##  ANY KIND WITH RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT
+##  INFRINGEMENT.
+##
+##  Licensed under a GNU GPL 2.0-style license, please see LICENSE.txt or
+##  contact permission@sei.cmu.edu for full terms.
+##
+##  [DISTRIBUTION STATEMENT A] This material has been approved for public
+##  release and unlimited distribution.  Please see Copyright notice for
+##  non-US Government use and distribution.
+##
+##  GOVERNMENT PURPOSE RIGHTS – Software and Software Documentation
+##  Contract No.: FA8702-15-D-0002
+##  Contractor Name: Carnegie Mellon University
+##  Contractor Address: 4500 Fifth Avenue, Pittsburgh, PA 15213
+##
+##  The Government's rights to use, modify, reproduce, release, perform,
+##  display, or disclose this software are restricted by paragraph (b)(2) of
+##  the Rights in Noncommercial Computer Software and Noncommercial Computer
+##  Software Documentation clause contained in the above identified
+##  contract. No restrictions apply after the expiration date shown
+##  above. Any reproduction of the software or portions thereof marked with
+##  this legend must also reproduce the markings.
+##
+##  This Software includes and/or makes use of Third-Party Software each
+##  subject to its own license.
+##
+##  DM23-2317
+##  @DISTRIBUTION_STATEMENT_END@
+
+=pod
+
+=head1 NAME
+
+B<filedaemon> - Invoke another program on files matching a glob pattern
+
+=head1 SYNOPSIS
+
+    filedaemon  --in INPUT_GLOB [--out OUTPUT_DIR]
+                --nextdir PROCESSED_INPUT_DIRECTORY
+                --faildir FAILED_INPUT_DIRECTORY
+                [--extension OUTPUT_EXTENSION]
+                [--poll POLLING_DELAY] [--lock]
+                [--pidfile PID_FILE] [--no-daemon]
+                [--log LOG_SPECIFIER] [--loglevel LOG_LEVEL]
+                [--verbose] [--version]
+                -- PROGRAM [PROGRAM_ARGS]
+
+=head1 DESCRIPTION
+
+B<filedaemon> operates on input files matching a B<glob(3)> pattern.  Each
+matching input file is passed to a child program (specified in the PROGRAM
+argument) which is expected to read input data from standard input and write
+the results to standard output.  B<filedaemon>'s job is simply to handle the
+mechanics of directory polling, file globbing, and routing of input and output
+files on behalf of the child program.
+
+Use of two dashes (--) after all B<filedaemon> command-line switches allows
+PROGRAM_ARGS to be interpreted by the PROGRAM rather than B<filedaemon> itself.
+While they are not strictly required if you do not need to pass arguments to
+PROGRAM, they should be used for consistency.
+
+=head1 OPTIONS
+
+=head2 I/O Options
+
+These options control the file locations for input and output files.
+
+=over 4
+
+=item B<--in> I<INPUT_GLOB>
+
+I<INPUT_GLOB> is a file glob pattern, which must be  escaped or quoted to
+prevent the shell expansion.  Files that match this pattern will be processed
+by B<filedaemon>.  This option is required.
+
+=item B<--out> I<OUTPUT_DIR>
+
+I<OUTPUT_DIR> is a directory in which to place output files.  The directory
+must exist prior to invoking B<filedaemon>, and any files in the directory
+that match the names of output files will be overwritten.  If not specified,
+the current working directory will be used.
+
+=back
+
+=head2 Daemon Options
+
+These options control what is done with processed input files, file locking,
+and other options to facilitate operation as a file daemon.
+
+=over 4
+
+=item B<--nextdir> I<PROCESSED_INPUT_DIRECTORY>
+
+When reading from files, if this option is present, input files will be
+moved to I<PROCESSED_INPUT_DIRECTORY> after they are successfully processed.
+The special string B<delete> will cause successfully processed input to be
+removed instead. This option is required.
+
+=item B<--faildir> I<FAILED_INPUT_DIRECTORY>
+
+When reading from files, if this option is present, input files will be
+moved to I<FAILED_INPUT_DIRECTORY> if processing failed.
+The special string B<delete> will cause failed input to be
+removed instead. This option is required.
+
+=item B<--extension> I<OUTPUT_EXTENSION>
+
+Replace the input file's extension with I<OUTPUT_EXTENSION>.  For
+example, if an input file is named "foo.txt", and this option is "out",
+then the output file will be named "foo.out".  If the input file has no
+extension, then this option's value will be appended to the filename.
+If this option is not specified, output files will have the same name
+as input files, except in the case when the B<--out> option is also not
+specified, in which case output files will be given a .out extension to
+avoid clobbering input files.
+
+=item B<--poll> I<POLLING_DELAY>
+
+I<POLLING_DELAY> is the polling delay in seconds; how long B<filedaemon> will
+wait for new input when none is available. The default is 30 seconds.
+
+=item B<--lock>
+
+Use lockfiles for concurrent file access protection.  B<filedaemon> will not
+process an input file for which a lock file exists, but will do so when the
+lock file is removed.  Lock files are written to the same directory as the
+input file, and the filename is the input filename (including any extensions)
+with ".lock" appended.
+
+=item B<--pidfile>=I<PIDFILE>
+
+Write the process identifier of the B<filedaemon> process to I<PIDFILE>.
+This option exists to facilitate the termination of the forked
+B<filedaemon> process by shutdown scripts.
+
+=item B<--no-daemon>
+
+Do not actually daemonize.  Mainly useful for testing/debugging.
+
+=back
+
+=head2 Logging Options
+
+These options are used to specify how log messages are routed.  B<filedaemon>
+can log to standard error, regular files, or the UNIX syslog facility.
+
+=over 4
+
+=item B<--log> I<LOG_SPECIFIER>
+
+Specifies destination for log messages. I<LOG_SPECIFIER> can be a B<syslog(3)>
+facility name, the special value B<stderr> for standard error, or the
+I<absolute> path to a file for file logging. Standard error logging is only
+available in B<--daemon> mode if B<--foreground> is present. The default log
+specifier is B<stderr> if available, B<user> otherwise.
+
+=item B<--loglevel> I<LOG_LEVEL>
+
+Specify minimum level for logged messages. In increasing levels of verbosity,
+the supported log levels are B<quiet>, B<error>, B<critical>, B<warning>,
+B<message>, B<info>, and B<debug>. The default logging level is B<warning>.
+
+=item B<--verbose>
+
+Equivalent to B<--loglevel debug>.
+
+=item B<--version>
+
+If present, print version and copyright information to standard error and exit.
+
+=back
+
+=head1 EXAMPLES
+
+The following will invoke B<yaf> on C<.pcap> files in the F</in> directory,
+writing results to the F</out> directory with a C<.yaf> extension.  Processed
+input files will be moved to the F</next> directory, and failed input
+files will be moved to the F</fail> directory.
+
+    filedaemon -i "/in/*.txt" -o /out -e yaf \
+        --nextdir /next --faildir /fail -- yaf
+
+The same as the first example, but with all input files deleted after
+processing:
+
+    filedaemon -i "/in/*.txt" -o /out -e yaf \
+        --nextdir delete --faildir delete -- yaf
+
+The same as the first example, but with a polling delay of 10 seconds
+(instead of the default 30) and an additional B<--mac> parameter passed to
+yaf:
+
+    filedaemon -i "/in/*.txt" -o /out -e yaf -p 10 \
+        --nextdir /next --faildir /fail -- yaf --mac
+
+
+=head1 BUGS
+
+Known issues are listed in the B<README> file in the Airframe source
+distribution.  Bug reports and feature requests may be sent via email to
+E<lt>netsa-help@cert.orgE<gt>.
+
+=head1 AUTHORS
+
+Tony Cebzanov and  Brian Trammell for
+the CERT Network Situational  Awareness
+Group, L<http://www.cert.org/netsa>
+
+=head1 SEE ALSO
+
+B<airdaemon(1)>, B<glob(3)>
+
+=cut

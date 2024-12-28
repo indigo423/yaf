@@ -1,0 +1,179 @@
+## airdaemon manual page   -*- mode: text; fill-column: 78 -*-
+##
+##  @DISTRIBUTION_STATEMENT_BEGIN@
+##  YAF 3.0.0
+##
+##  Copyright 2023 Carnegie Mellon University.
+##
+##  NO WARRANTY. THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING
+##  INSTITUTE MATERIAL IS FURNISHED ON AN "AS-IS" BASIS. CARNEGIE MELLON
+##  UNIVERSITY MAKES NO WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+##  AS TO ANY MATTER INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR
+##  PURPOSE OR MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF
+##  THE MATERIAL. CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF
+##  ANY KIND WITH RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT
+##  INFRINGEMENT.
+##
+##  Licensed under a GNU GPL 2.0-style license, please see LICENSE.txt or
+##  contact permission@sei.cmu.edu for full terms.
+##
+##  [DISTRIBUTION STATEMENT A] This material has been approved for public
+##  release and unlimited distribution.  Please see Copyright notice for
+##  non-US Government use and distribution.
+##
+##  GOVERNMENT PURPOSE RIGHTS – Software and Software Documentation
+##  Contract No.: FA8702-15-D-0002
+##  Contractor Name: Carnegie Mellon University
+##  Contractor Address: 4500 Fifth Avenue, Pittsburgh, PA 15213
+##
+##  The Government's rights to use, modify, reproduce, release, perform,
+##  display, or disclose this software are restricted by paragraph (b)(2) of
+##  the Rights in Noncommercial Computer Software and Noncommercial Computer
+##  Software Documentation clause contained in the above identified
+##  contract. No restrictions apply after the expiration date shown
+##  above. Any reproduction of the software or portions thereof marked with
+##  this legend must also reproduce the markings.
+##
+##  This Software includes and/or makes use of Third-Party Software each
+##  subject to its own license.
+##
+##  DM23-2317
+##  @DISTRIBUTION_STATEMENT_END@
+
+=pod
+
+=head1 NAME
+
+B<airdaemon> - Run a program as a daemon process, restarting it if it dies
+
+=head1 SYNOPSIS
+
+    airdaemon   [--retry RETRY_DELAY] [--retry-max RETRY_MAX_DELAY]
+                [--pidfile PID_FILE] [--airdaemon-pidfile PID_FILE]
+                [--log LOG_SPECIFIER] [--loglevel LOG_LEVEL]
+                [--verbose] [--version] [--no-daemon]
+                -- PROGRAM [PROGRAM_ARGS]
+
+=head1 DESCRIPTION
+
+B<airdaemon> invokes a child process and ensures that it is restarted if it
+encounters any errors.  The delay between child exit and restart can be
+chosen, and can either be constant or exponentially increasing up to a
+specified maximum.
+
+Use of two dashes (--) after all B<airdaemon> command-line switches allows
+PROGRAM_ARGS to be interpreted by the PROGRAM rather than B<airdaemon> itself.
+While they are not strictly required if you do not need to pass arguments to
+PROGRAM, they should be used for consistency.
+
+=head1 OPTIONS
+
+=head2 Daemon Options
+
+=over 4
+
+=item B<--retry>=I<RETRY_DELAY>
+
+Wait RETRY_DELAY seconds after the child process exits abnormally until trying
+to restart the child process.  See also B<--retry-max>
+
+=item B<--retry-max>=I<RETRY_MAX_DELAY>
+
+This parameter, combined with the B<--retry> parameter, facilitates truncated
+binary exponential backoff of the retry logic.  The first retry attempt will
+be delayed by the value of the B<--retry> parameter.  If the child process
+exits abnormally within this time period, the delay is doubled.  Once the
+child process survives longer than the value of the B<--retry> parameter, the
+retry delay is reset to that value.
+
+For example, assume B<--retry>=30 and B<--retry-max>=240.  The first time the
+child process exits abnormally, B<airdaemon> will wait 30 seconds before
+invoking the child process again.  If it exits abnormally again within 30
+seconds, B<airdaemon> will wait 60 seconds and try again.  If the process
+dies again within 30 seconds, the delay doubles again to 120.  The process
+continues until the delay hits the maximum of 240.  Once the child process
+survives for 30 seconds, the delay will be reset to the original retry delay
+of 30.
+
+=item B<--pidfile>=I<PID_FILE>
+
+Write the process identifier of the child process to I<PID_FILE>.
+Each time the child process is restarted, the process identifier in this file
+is updated. This option exists to facilitate the termination of the child
+process by shutdown scripts. Note that if the child process terminates
+normally during shutdown, B<airdaemon> will terminate normally as well, so it
+is usually sufficient just to kill the pid in this file at shutdown.
+
+=item B<--airdaemon-pidfile>=I<PID_FILE>
+
+Write the process identifier of the B<airdaemon> process to I<PID_FILE>.
+This option exists to facilitate the termination of the forked
+B<airdaemon> process by shutdown scripts.
+
+=item B<--no-daemon>
+
+Do not actually daemonize.  Mainly useful for testing/debugging.
+
+=back
+
+=head2 Logging Options
+
+These options are used to specify how log messages are routed.  B<airdaemon>
+can log to standard error, regular files, or the UNIX syslog facility.
+
+=over 4
+
+=item B<--log> I<LOG_SPECIFIER>
+
+Specifies destination for log messages. I<LOG_SPECIFIER> can be a B<syslog(3)>
+facility name, the special value B<stderr> for standard error, or the
+I<absolute> path to a file for file logging. Standard error logging is only
+available in B<--daemon> mode if B<--foreground> is present. The default log
+specifier is B<stderr> if available, B<user> otherwise.
+
+=item B<--loglevel> I<LOG_LEVEL>
+
+Specify minimum level for logged messages. In increasing levels of verbosity,
+the supported log levels are B<quiet>, B<error>, B<critical>, B<warning>,
+B<message>, B<info>, and B<debug>. The default logging level is B<warning>.
+
+=item B<--verbose>
+
+Equivalent to B<--loglevel debug>.
+
+=item B<--version>
+
+If present, print version and copyright information to standard error and exit.
+
+=back
+
+=head1 EXAMPLES
+
+The following will ping www.cert.org every 15 seconds until ping returns
+sucess:
+
+    airdaemon --retry 15 -- ping -c 1 www.cert.org
+
+The same as above, except the delay will double until reaching a maximum of 15
+minutes:
+
+    airdaemon --retry 15 --retry-max 900 -- ping -c 1 www.cert.org
+
+
+=head1 BUGS
+
+Known issues are listed in the B<README> file in the Airframe source
+distribution.  Bug reports and feature requests may be sent via email to
+E<lt>netsa-help@cert.orgE<gt>.
+
+=head1 AUTHORS
+
+Tony Cebzanov and  Brian Trammell for the
+CERT Network Situational Awareness
+Group, L<http://www.cert.org/netsa>
+
+=head1 SEE ALSO
+
+B<filedaemon(1)>
+
+=cut

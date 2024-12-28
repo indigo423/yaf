@@ -1,0 +1,568 @@
+/* include/yaf/config.h.in.  Generated from configure.ac by autoheader.  */
+
+/*
+ *  Copyright 2012-2023 Carnegie Mellon University
+ *  See license information in LICENSE.txt.
+ */
+/*
+ *  autoheader generated header file
+ *  ------------------------------------------------------------------------
+ *  @DISTRIBUTION_STATEMENT_BEGIN@
+ *  YAF 3.0.0
+ *
+ *  Copyright 2023 Carnegie Mellon University.
+ *
+ *  NO WARRANTY. THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING
+ *  INSTITUTE MATERIAL IS FURNISHED ON AN "AS-IS" BASIS. CARNEGIE MELLON
+ *  UNIVERSITY MAKES NO WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+ *  AS TO ANY MATTER INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR
+ *  PURPOSE OR MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF
+ *  THE MATERIAL. CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF
+ *  ANY KIND WITH RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT
+ *  INFRINGEMENT.
+ *
+ *  Licensed under a GNU GPL 2.0-style license, please see LICENSE.txt or
+ *  contact permission@sei.cmu.edu for full terms.
+ *
+ *  [DISTRIBUTION STATEMENT A] This material has been approved for public
+ *  release and unlimited distribution.  Please see Copyright notice for
+ *  non-US Government use and distribution.
+ *
+ *  GOVERNMENT PURPOSE RIGHTS – Software and Software Documentation
+ *  Contract No.: FA8702-15-D-0002
+ *  Contractor Name: Carnegie Mellon University
+ *  Contractor Address: 4500 Fifth Avenue, Pittsburgh, PA 15213
+ *
+ *  The Government's rights to use, modify, reproduce, release, perform,
+ *  display, or disclose this software are restricted by paragraph (b)(2) of
+ *  the Rights in Noncommercial Computer Software and Noncommercial Computer
+ *  Software Documentation clause contained in the above identified
+ *  contract. No restrictions apply after the expiration date shown
+ *  above. Any reproduction of the software or portions thereof marked with
+ *  this legend must also reproduce the markings.
+ *
+ *  This Software includes and/or makes use of Third-Party Software each
+ *  subject to its own license.
+ *
+ *  DM23-2317
+ *  @DISTRIBUTION_STATEMENT_END@
+ */
+
+/* fixbuf version */
+#undef FIXBUF_VERSION
+
+/* Define if pointers to integers require aligned access */
+#undef HAVE_ALIGNED_ACCESS_REQUIRED
+
+/* Define to 1 if you have the `argz_add' function. */
+#undef HAVE_ARGZ_ADD
+
+/* Define to 1 if you have the `argz_append' function. */
+#undef HAVE_ARGZ_APPEND
+
+/* Define to 1 if you have the `argz_count' function. */
+#undef HAVE_ARGZ_COUNT
+
+/* Define to 1 if you have the `argz_create_sep' function. */
+#undef HAVE_ARGZ_CREATE_SEP
+
+/* Define to 1 if you have the <argz.h> header file. */
+#undef HAVE_ARGZ_H
+
+/* Define to 1 if you have the `argz_insert' function. */
+#undef HAVE_ARGZ_INSERT
+
+/* Define to 1 if you have the `argz_next' function. */
+#undef HAVE_ARGZ_NEXT
+
+/* Define to 1 if you have the `argz_stringify' function. */
+#undef HAVE_ARGZ_STRINGIFY
+
+/* Define to 1 if you have the <arpa/inet.h> header file. */
+#undef HAVE_ARPA_INET_H
+
+/* Define to 1 if you have the `atexit' function. */
+#undef HAVE_ATEXIT
+
+/* Define to 1 if you have the `clock_gettime' function. */
+#undef HAVE_CLOCK_GETTIME
+
+/* Define to 1 if you have the `closedir' function. */
+#undef HAVE_CLOSEDIR
+
+/* Define to 1 if you have the declaration of `cygwin_conv_path', and to 0 if
+   you don't. */
+#undef HAVE_DECL_CYGWIN_CONV_PATH
+
+/* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
+   */
+#undef HAVE_DIRENT_H
+
+/* Define if you have the GNU dld library. */
+#undef HAVE_DLD
+
+/* Define to 1 if you have the <dld.h> header file. */
+#undef HAVE_DLD_H
+
+/* Define to 1 if you have the `dlerror' function. */
+#undef HAVE_DLERROR
+
+/* Define to 1 if you have the <dlfcn.h> header file. */
+#undef HAVE_DLFCN_H
+
+/* Define to 1 if you have the <dl.h> header file. */
+#undef HAVE_DL_H
+
+/* Define if you have the _dyld_func_lookup function. */
+#undef HAVE_DYLD
+
+/* Define to 1 if the system has the type `error_t'. */
+#undef HAVE_ERROR_T
+
+/* Define to 1 if you have the `EVP_md5' function. */
+#undef HAVE_EVP_MD5
+
+/* Define to 1 if you have the `EVP_MD_fetch' function. */
+#undef HAVE_EVP_MD_FETCH
+
+/* Define to 1 if you have the `EVP_Q_digest' function. */
+#undef HAVE_EVP_Q_DIGEST
+
+/* Define to 1 if you have the `EVP_sha1' function. */
+#undef HAVE_EVP_SHA1
+
+/* Define to 1 if you have the `EVP_sha256' function. */
+#undef HAVE_EVP_SHA256
+
+/* Define to 1 if you have the <fcntl.h> header file. */
+#undef HAVE_FCNTL_H
+
+/* Define to 1 if you have the `fork' function. */
+#undef HAVE_FORK
+
+/* Define to 1 if you have the `getaddrinfo' function. */
+#undef HAVE_GETADDRINFO
+
+/* Define to 1 if you have the `gethostbyname' function. */
+#undef HAVE_GETHOSTBYNAME
+
+/* Define to 1 if you have the `gethostname' function. */
+#undef HAVE_GETHOSTNAME
+
+/* Define to 1 if you have the `gettimeofday' function. */
+#undef HAVE_GETTIMEOFDAY
+
+/* Define to 1 if you have the <glob.h> header file. */
+#undef HAVE_GLOB_H
+
+/* Define to 1 if you have the <grp.h> header file. */
+#undef HAVE_GRP_H
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Define if you have the libdl library or equivalent. */
+#undef HAVE_LIBDL
+
+/* Define if libdlloader will be built on this platform */
+#undef HAVE_LIBDLLOADER
+
+/* Define to 1 if you have the `pcap' library (-lpcap). */
+#undef HAVE_LIBPCAP
+
+/* Define to 1 if you have the `wpcap' library (-lwpcap). */
+#undef HAVE_LIBWPCAP
+
+/* Define to 1 if you have the `localtime_r' function. */
+#undef HAVE_LOCALTIME_R
+
+/* Define this if a modern libltdl is already installed */
+#undef HAVE_LTDL
+
+/* Define to 1 if you have the <mach-o/dyld.h> header file. */
+#undef HAVE_MACH_O_DYLD_H
+
+/* Define to 1 if you have the <malloc.h> header file. */
+#undef HAVE_MALLOC_H
+
+/* Define to 1 if you have the `MD5' function. */
+#undef HAVE_MD5
+
+/* Define to 1 if you have the `memchr' function. */
+#undef HAVE_MEMCHR
+
+/* Define to 1 if you have the `memset' function. */
+#undef HAVE_MEMSET
+
+/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
+#undef HAVE_NDIR_H
+
+/* Define to 1 if you have the <netdb.h> header file. */
+#undef HAVE_NETDB_H
+
+/* Define to 1 if you have the <netinet/in.h> header file. */
+#undef HAVE_NETINET_IN_H
+
+/* Define to 1 if you have the `opendir' function. */
+#undef HAVE_OPENDIR
+
+/* Define to 1 to enable OpenSSL support */
+#undef HAVE_OPENSSL
+
+/* Define to 1 if you have the <openssl/evp.h> header file. */
+#undef HAVE_OPENSSL_EVP_H
+
+/* Define to 1 if you have the <openssl/md5.h> header file. */
+#undef HAVE_OPENSSL_MD5_H
+
+/* Define to 1 if you have the <openssl/sha.h> header file. */
+#undef HAVE_OPENSSL_SHA_H
+
+/* Define to 1 if you have the <pcap.h> header file. */
+#undef HAVE_PCAP_H
+
+/* Define to 1 if you have the <pcap-zcopy.h> header file. */
+#undef HAVE_PCAP_ZCOPY_H
+
+/* Define to 1 to enable PCRE support */
+#undef HAVE_PCRE
+
+/* Define to 1 if you have the <pfring.h> header file. */
+#undef HAVE_PFRING_H
+
+/* Define to 1 if you have the <pfring_zc.h> header file. */
+#undef HAVE_PFRING_ZC_H
+
+/* Define to 1 if you have the `pow' function. */
+#undef HAVE_POW
+
+/* Define if libtool can extract symbol lists from object files. */
+#undef HAVE_PRELOADED_SYMBOLS
+
+/* Define to 1 if you have the <pwd.h> header file. */
+#undef HAVE_PWD_H
+
+/* Define to 1 if you have the `readdir' function. */
+#undef HAVE_READDIR
+
+/* Define to 1 if you have the `select' function. */
+#undef HAVE_SELECT
+
+/* Define to 1 if you have the `SHA1' function. */
+#undef HAVE_SHA1
+
+/* Define to 1 if you have the `SHA256' function. */
+#undef HAVE_SHA256
+
+/* Define if you have the shl_load function. */
+#undef HAVE_SHL_LOAD
+
+/* Define to 1 if you have the `socket' function. */
+#undef HAVE_SOCKET
+
+/* Define to 1 if you have the `sqrt' function. */
+#undef HAVE_SQRT
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the `strchr' function. */
+#undef HAVE_STRCHR
+
+/* Define to 1 if you have the `strdup' function. */
+#undef HAVE_STRDUP
+
+/* Define to 1 if you have the `strerror' function. */
+#undef HAVE_STRERROR
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* Define to 1 if you have the `strlcat' function. */
+#undef HAVE_STRLCAT
+
+/* Define to 1 if you have the `strlcpy' function. */
+#undef HAVE_STRLCPY
+
+/* Define to 1 if you have the `strrchr' function. */
+#undef HAVE_STRRCHR
+
+/* Define to 1 if you have the `strstr' function. */
+#undef HAVE_STRSTR
+
+/* Define to 1 if you have the `strtoul' function. */
+#undef HAVE_STRTOUL
+
+/* Define to 1 if you have the `strtoull' function. */
+#undef HAVE_STRTOULL
+
+/* Define to 1 if `d_type' is a member of `struct dirent'. */
+#undef HAVE_STRUCT_DIRENT_D_TYPE
+
+/* Define to 1 if you have the <syslog.h> header file. */
+#undef HAVE_SYSLOG_H
+
+/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
+   */
+#undef HAVE_SYS_DIR_H
+
+/* Define to 1 if you have the <sys/dl.h> header file. */
+#undef HAVE_SYS_DL_H
+
+/* Define to 1 if you have the <sys/errno.h> header file. */
+#undef HAVE_SYS_ERRNO_H
+
+/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
+   */
+#undef HAVE_SYS_NDIR_H
+
+/* Define to 1 if you have the <sys/socket.h> header file. */
+#undef HAVE_SYS_SOCKET_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/time.h> header file. */
+#undef HAVE_SYS_TIME_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the `vfork' function. */
+#undef HAVE_VFORK
+
+/* Define to 1 if you have the <vfork.h> header file. */
+#undef HAVE_VFORK_H
+
+/* This value is set to 1 to indicate that the system argz facility works */
+#undef HAVE_WORKING_ARGZ
+
+/* Define to 1 if `fork' works. */
+#undef HAVE_WORKING_FORK
+
+/* Define to 1 if `vfork' works. */
+#undef HAVE_WORKING_VFORK
+
+/* Define if the OS needs help to load dependent libraries for dlopen(). */
+#undef LTDL_DLOPEN_DEPLIBS
+
+/* Define to the system default library search path. */
+#undef LT_DLSEARCH_PATH
+
+/* The archive extension */
+#undef LT_LIBEXT
+
+/* The archive prefix */
+#undef LT_LIBPREFIX
+
+/* Define to the extension used for runtime loadable modules, say, ".so". */
+#undef LT_MODULE_EXT
+
+/* Define to the name of the environment variable that determines the run-time
+   module search path. */
+#undef LT_MODULE_PATH_VAR
+
+/* Define to the sub-directory where libtool stores uninstalled libraries. */
+#undef LT_OBJDIR
+
+/* Define to the shared library suffix, say, ".dylib". */
+#undef LT_SHARED_EXT
+
+/* Define to the shared archive member specification, say "(shr.o)". */
+#undef LT_SHARED_LIB_MEMBER
+
+/* Define if dlsym() requires a leading underscore in symbol names. */
+#undef NEED_USCORE
+
+/* Define to 1 if your C compiler doesn't accept -c and -o together. */
+#undef NO_MINUS_C_MINUS_O
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* size_t cast for string formatting */
+#undef SIZE_T_CAST
+
+/* (f)printf format string for type size_t */
+#undef SIZE_T_FORMAT
+
+/* (f)printf format string for type size_t */
+#undef SIZE_T_FORMATX
+
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
+#undef STDC_HEADERS
+
+/* Version number of package */
+#undef VERSION
+
+/* Define to 1 to enable application labeler engine */
+#undef YAF_ENABLE_APPLABEL
+
+/* Define to 1 to enable BIVIO support */
+#undef YAF_ENABLE_BIVIO
+
+/* Define to 1 to use compact IPv4 address data structures where possible */
+#undef YAF_ENABLE_COMPACT_IP4
+
+/* Define to 1 to enable DAG support */
+#undef YAF_ENABLE_DAG
+
+/* Define to 1 to enable recording DAG interface numbers */
+#undef YAF_ENABLE_DAG_SEPARATE_INTERFACES
+
+/* Define to 1 to enable export of DNS Authoritative Responses Only */
+#undef YAF_ENABLE_DNSAUTH
+
+/* Define to 1 to enable export of DNS NXDomain Responses Only */
+#undef YAF_ENABLE_DNSNXDOMAIN
+
+/* Define to 1 to enable application labeler engine */
+#undef YAF_ENABLE_DPI
+
+/* Define to 1 to enable entropy calculator */
+#undef YAF_ENABLE_ENTROPY
+
+/* Define to 1 to enable fingerprint exporter */
+#undef YAF_ENABLE_FPEXPORT
+
+/* Define to 1 to enable plugin support */
+#undef YAF_ENABLE_HOOKS
+
+/* Define to 1 to use the local timezone for command input and printing
+   records. Define to 0 to use UTC. */
+#undef YAF_ENABLE_LOCALTIME
+
+/* Define to 1 to enable yaf metadata export */
+#undef YAF_ENABLE_METADATA_EXPORT
+
+/* Define to 1 to enable Napatech support */
+#undef YAF_ENABLE_NAPATECH
+
+/* Define to 1 to enable ndpi */
+#undef YAF_ENABLE_NDPI
+
+/* Define to 1 to enable Netronome support */
+#undef YAF_ENABLE_NETRONOME
+
+/* Define to 1 to enable p0f OS fingerprinter */
+#undef YAF_ENABLE_P0F
+
+/* Define to 1 to enable yaf payload processing */
+#undef YAF_ENABLE_PAYLOAD
+
+/* Define to 1 to enable PFRING support */
+#undef YAF_ENABLE_PFRING
+
+/* Define to 1 to enable PFRING ZC support */
+#undef YAF_ENABLE_PFRINGZC
+
+/* Define to 1 to enable recording interface numbers */
+#undef YAF_ENABLE_SEPARATE_INTERFACES
+
+/* Define to 1 build with support for zlib compression. Requires the libz
+   library and the <zlib.h> header file. */
+#undef YAF_ENABLE_ZLIB
+
+/* Define to 1 on Linux for privilege drop hack */
+#undef YAF_LINUX_PRIVHACK
+
+/* Define to 1 to enable mpls support */
+#undef YAF_MPLS
+
+/* Define to 1 to enable non-IP flow data export */
+#undef YAF_NONIP
+
+/* Define for Solaris 2.5.1 so the uint32_t typedef from <sys/synch.h>,
+   <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the
+   #define below would cause a syntax error. */
+#undef _UINT32_T
+
+/* Define for Solaris 2.5.1 so the uint64_t typedef from <sys/synch.h>,
+   <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the
+   #define below would cause a syntax error. */
+#undef _UINT64_T
+
+/* Define for Solaris 2.5.1 so the uint8_t typedef from <sys/synch.h>,
+   <pthread.h>, or <semaphore.h> is not used. If the typedef were allowed, the
+   #define below would cause a syntax error. */
+#undef _UINT8_T
+
+/* Define so that glibc/gnulib argp.h does not typedef error_t. */
+#undef __error_t_defined
+
+/* Define to a type to use for 'error_t' if it is not otherwise available. */
+#undef error_t
+
+/* Define to `int' if <sys/types.h> doesn't define. */
+#undef gid_t
+
+/* Define to the type of a signed integer type of width exactly 32 bits if
+   such a type exists and the standard includes do not define it. */
+#undef int32_t
+
+/* Define to the type of a signed integer type of width exactly 64 bits if
+   such a type exists and the standard includes do not define it. */
+#undef int64_t
+
+/* Define as a signed integer type capable of holding a process identifier. */
+#undef pid_t
+
+/* Define to `unsigned int' if <sys/types.h> does not define. */
+#undef size_t
+
+/* Define to `int' if <sys/types.h> does not define. */
+#undef ssize_t
+
+/* Define to `int' if <sys/types.h> doesn't define. */
+#undef uid_t
+
+/* Define to the type of an unsigned integer type of width exactly 16 bits if
+   such a type exists and the standard includes do not define it. */
+#undef uint16_t
+
+/* Define to the type of an unsigned integer type of width exactly 32 bits if
+   such a type exists and the standard includes do not define it. */
+#undef uint32_t
+
+/* Define to the type of an unsigned integer type of width exactly 64 bits if
+   such a type exists and the standard includes do not define it. */
+#undef uint64_t
+
+/* Define to the type of an unsigned integer type of width exactly 8 bits if
+   such a type exists and the standard includes do not define it. */
+#undef uint8_t
+
+/* Define as `fork' if `vfork' does not work. */
+#undef vfork

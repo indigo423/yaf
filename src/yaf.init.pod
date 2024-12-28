@@ -1,0 +1,430 @@
+##  yaf.init manual page   -*- mode: text; fill-column: 78 -*-
+##
+##  Describes the Lua config file that replaces/supplements command line
+##  options.
+##
+##  @DISTRIBUTION_STATEMENT_BEGIN@
+##  YAF 3.0.0
+##
+##  Copyright 2023 Carnegie Mellon University.
+##
+##  NO WARRANTY. THIS CARNEGIE MELLON UNIVERSITY AND SOFTWARE ENGINEERING
+##  INSTITUTE MATERIAL IS FURNISHED ON AN "AS-IS" BASIS. CARNEGIE MELLON
+##  UNIVERSITY MAKES NO WARRANTIES OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+##  AS TO ANY MATTER INCLUDING, BUT NOT LIMITED TO, WARRANTY OF FITNESS FOR
+##  PURPOSE OR MERCHANTABILITY, EXCLUSIVITY, OR RESULTS OBTAINED FROM USE OF
+##  THE MATERIAL. CARNEGIE MELLON UNIVERSITY DOES NOT MAKE ANY WARRANTY OF
+##  ANY KIND WITH RESPECT TO FREEDOM FROM PATENT, TRADEMARK, OR COPYRIGHT
+##  INFRINGEMENT.
+##
+##  Licensed under a GNU GPL 2.0-style license, please see LICENSE.txt or
+##  contact permission@sei.cmu.edu for full terms.
+##
+##  [DISTRIBUTION STATEMENT A] This material has been approved for public
+##  release and unlimited distribution.  Please see Copyright notice for
+##  non-US Government use and distribution.
+##
+##  GOVERNMENT PURPOSE RIGHTS – Software and Software Documentation
+##  Contract No.: FA8702-15-D-0002
+##  Contractor Name: Carnegie Mellon University
+##  Contractor Address: 4500 Fifth Avenue, Pittsburgh, PA 15213
+##
+##  The Government's rights to use, modify, reproduce, release, perform,
+##  display, or disclose this software are restricted by paragraph (b)(2) of
+##  the Rights in Noncommercial Computer Software and Noncommercial Computer
+##  Software Documentation clause contained in the above identified
+##  contract. No restrictions apply after the expiration date shown
+##  above. Any reproduction of the software or portions thereof marked with
+##  this legend must also reproduce the markings.
+##
+##  This Software includes and/or makes use of Third-Party Software each
+##  subject to its own license.
+##
+##  DM23-2317
+##  @DISTRIBUTION_STATEMENT_END@
+
+=pod
+
+=head1 NAME
+
+B<yaf.init> - YAF configuration file
+
+=head1 DESCRIPTION
+
+The B<yaf(1)> configuration file is an alternative to
+running B<yaf> with command line options. The YAF
+configuration file is written in the Lua language
+(L<http://www.lua.org/>), and this file may be specified
+on the B<yaf> command line with the B<--config> option.
+A template file is provided in
+F</usr/local/share/yaf/yaf.init>; the file should be
+copied and customized for your needs.
+
+=head1 CONFIGURATION FILE
+
+The syntax of the configuration file is explained by examples.
+
+=head2 Annotated configuration file
+
+ -- This is a comment.
+ -- Anything not marked as Required is optional.
+
+ -- The only required variables are "input" and "output".
+ -- All other variables are optional.
+
+The template configuration file must be customized by the user, and to ensure
+that happens, the tmeplate file raises an error.  You must delete the error
+when you customize the file.
+
+ -- Remove these lines when you customize this file
+ error [[You are attempting to use yaf.init without customizing it.
+ You must remove the error statement from the beginning of the file.]]
+
+Specify the input.
+
+ -- A variable named "input" is required; its value must be a table.
+ -- It specifies the input to yaf.
+
+This example has B<yaf> read PCAP data from an interface.
+
+ input = {
+
+    -- The input table must have a key named "type". The default
+    -- input "type" is "file".  Valid values are "pcap", "dag",
+    -- "napatech", "netronome", "pfring", "zc", "file", and "caplist".
+
+    type="pcap",
+
+    -- In "pcap", "dag", "napatech", "netronome", "pfring", and "zc",
+    -- a "inf" field is required.  Its value is the name of the interface
+    -- that yaf will read. In the "zc" case, it is the cluster ID
+    -- that yaf should listen to.
+    inf="en0",
+
+    -- Optional parameters for all input types
+    -- are "export_interface" and "force_read_all".
+    -- Both options expect boolean values "true" and "false".
+
+    export_interface=true}
+
+This example has B<yaf> read PCAP data from a file.
+
+ input = {
+
+    type = "file",
+
+    -- If type is "file", a "file" is expected with the
+    -- full path to the PCAP file.
+    file="/pcaps/mypcap.pcap"}
+
+This example has B<yaf> read PCAP data from the standard input.  The type does
+not need to be specified since "file" is the default.
+
+ -- Use a file name of "-" to read from stdin.
+ input = {file = "-"}
+
+This example has B<yaf> read PCAP data from a list of files.
+
+ input = {
+    type = "caplist",
+
+   -- If type is "caplist", a "file" is expected which is
+   -- the full path to a text file that contains a list
+   -- of PCAP files in the order that they will be processed.
+    file = "/data/pcapfile.txt",
+
+   -- An optional parameter to "caplist" types, is "noerror"
+   -- which expects a boolean value (true/false). If true,
+   -- yaf will continue to process the list if it encounters
+   -- an error in a PCAP file.
+   noerror = true}
+
+Specify the output.
+
+ -- A variable named "output" is required; its value must be a table.
+ -- It specifies the output of yaf.
+
+This example has B<yaf> write to a TCP socket.
+
+  output = {
+    -- The host where an IPFIX collector is listening
+    host = "localhost",
+
+    -- The port where the IPFIX collector is listening. The value to "port"
+    -- must be in quotation marks.
+
+    port = "18000",
+
+    -- Acceptable protocol types are "tcp", "udp", and "sctp".
+    -- If protocol is "udp", the optional "udp_temp_timeout" key is
+    -- also available.
+    protocol = "tcp"}
+
+This example has B<yaf> write to an IPFIX file that rotates every
+200 seconds.  The output file will be locked until B<yaf> has
+closed the file.
+
+  output = {
+    file = "/data/yaffile.yaf",
+
+    rotate = 200,
+
+    lock = true}
+
+This example has B<yaf> write IPFIX data to the standard output.
+
+ -- Use a file name of "-" to write to stdout.
+ output = {file = "-"}
+
+The behavor of the packet decoder may be customized.
+
+ -- The "decode" variable is optional. If defined, its value must
+ -- be a table. All keywords within the "decode" variable expect
+ -- a boolean value (true/false).
+ --
+ -- By default, all of the below features are turned off.
+ decode = {
+    -- If the "gre" variable is set to "true", gre decoding will be enabled.
+    gre = false,
+
+    -- If the "ip4_only" variable is set to "true", yaf will only
+    -- process IPv4 flows.
+    ip4_only = false,
+
+    -- If the "ip6_only" variable is set to "true", yaf will only
+    -- process Ipv6 flows.
+    ip6_only = false,
+
+    -- If the "nofrag" variable is set to "true", yaf will not
+    -- process fragmented packets.
+    nofrag = false}
+
+Flow settings modify the data exported by B<yaf>.
+
+ -- The "export" variable is optional. Its value must be a table.
+ -- All keywords within the "export" variable
+ -- expect a boolean response (true/false).
+ export = {
+    -- See the related options in the yaf man page.
+    silk = true,
+    uniflow = true,
+    force_ip6 = false,
+    flow_stats = true,
+    delta = false,
+    mac = true }
+
+To control B<yaf>'s logging, define this table:
+
+ -- The "log" variable is optional. Its value must be a table.
+ log = {
+    -- The "spec" keyword may be set to a syslog facility name,
+    -- stderr, or the absolute path to a file for file logging.
+    -- Default is stderr.
+    spec = "/var/log/yaf/yaf.log",
+
+    -- The "level" keyword specifies how much to log. The accepted
+    -- values are "quiet", "error", "critical", "warning", "message",
+    -- and "debug". Default is "warning".
+    level = "debug"}
+
+To specify the plugins that B<yaf> loads:
+
+ -- The plugin variable is optional. Its value must be a table of tables.
+ -- See the yafdhcp man page for the plugin that
+ -- is provided with yaf.
+
+ -- To make configuration easier, specify Lua variables that hold
+ -- the information for each plugin.
+ -- SAMPLE_PLUGIN = {
+ --      -- The "name" keyword specifies the full path to the plugin
+ --      -- library name to load.
+ --      name = "/usr/local/lib/yaf/sample.la",
+ --
+ --      -- The "options" keyword specifies the arguments given to the
+ --      -- plugin, if any.
+ --      options = "53",
+ --
+ --      -- The "conf" keyword specifies the path to a configuration
+ --      -- file to be given to the plugin, if any.
+ --      conf = "/usr/local/etc/sample.conf"}
+
+ -- For the dhcp plugin, only the name is needed.
+ DHCP_PLUGIN = {name = "/usr/local/lib/yaf/dhcp_fp_plugin.la"}
+
+ plugin = {DHCP_PLUGIN}
+
+To configure B<yaf>'s storage of PCAP data in local files:
+
+ -- The pcap variable is optional.  Its value must be a table.
+ -- See the yaf man page for more information on yaf's PCAP capabilities.
+ pcap = {
+    -- The "path" keyword specifies where yaf will write PCAP files.
+    path = "/data/pcap/yafpcap",
+
+    -- The "maxpcap" keyword specifies the maximum file size of a yaf PCAP file.
+    maxpcap = 100,
+
+    -- The "pcap_timer" keyword specifies how often the PCAP file
+    -- should be rotated.
+    pcap_timer = 300,
+
+    -- The "meta" keyword specifies where to write PCAP meta information.
+    meta = "/data/meta/yafmeta"}
+
+The following keywords are optional variables.  See the yaf man page for
+more information.
+
+ -- idle_timeout = IDLE_TIMEOUT (integer)
+ -- Set flow idle timeout in seconds.  Default is 300 seconds (5 min)
+ -- Setting IDLE_TIMEOUT to 0 creates a flow for each packet.
+
+ idle_timeout = 300
+
+ -- active_timeout = ACTIVE_TIMEOUT (integer)
+ -- Set flow active timeout in seconds.  Default is 1800 seconds (30 min)
+
+ active_timeout = 1800
+
+ -- filter = BPF_FILTER
+ -- Set Berkeley Packet Filtering (BPF) in YAF with BPF_FILTER.
+
+ filter = "port 53"
+
+ -- APPLICATION LABELING AND DEEP PACKET INSPECTION OPTIONS
+ -- Turn on application labeling by setting applabel = true
+ -- Turn on deep packet inspection by setting dpi = true
+ -- Read the application labeler/DPI rules file from dpi_rules=
+ -- If dpi_rules is not set, yaf uses the default location
+
+ applabel = true
+ dpi = true
+ -- dpi_rules = "/usr/local/etc/yafDPIRules.conf"
+
+ -- maxpayload = PAYLOAD_OCTETS (integer)
+ -- Capture at most PAYLOAD_OCTETS octets from the start of each direction
+ -- of each flow.  Default is 0.
+
+ maxpayload = 1024
+
+ -- maxexport = MAX_PAY_OCTETS (integer)
+ -- Export at most MAX_PAY_OCTETS octets from the start of each direction
+ -- of each flow from the PAYLOAD_OCTETS given to maxpayload.
+ -- Default is PAYLOAD_OCTETS if export_payload=true
+
+ maxexport = maxpayload
+
+ -- export_payload = true/false
+ -- If true, export at most PAYLOAD_OCTETS or MAX_PAY_OCTETS given to
+ -- maxpayload or maxexport for each direction of the flow. Default is false.
+
+ export_payload = false
+
+ -- export_payload_applabels = {INTEGER, INTEGER, ...}
+ -- If set, payload export is enabled (as with export_payload) but only
+ -- for the silkAppLabel values in the list.  The value must be a list of
+ -- integers between 0 and 65535 inclusive.  Default is not set.
+
+ -- export_payload_applabels = { }
+
+ -- udp_payload = true/false
+ -- If true, capture at most PAYLOAD_OCTETS octets from the start of
+ -- each UDP flow, where PAYLOAD_OCTETS is set using the maxpayload option
+
+ udp_payload = true
+
+ -- stats = INTERVAL (integer)
+ -- If present, yaf will export process statistics every INTERVAL seconds.
+ -- If stats is set to 0, no stats records will be exported.
+ -- default is 300
+
+ stats = 300
+
+ -- no_tombstone = true/false
+ -- If true, tombstone records will not be sent.
+ -- default is false (that is, to export tombstone records).
+
+ -- no_tombstone =
+
+ -- tombstone_configured_id = TOMBSTONE_IDENTIFIER (integer)
+ -- Set the configured identifier for tombstone records generated by YAF.
+ -- default is 0
+
+ -- tombstone_configured_id =
+
+ -- no_element_metadata = true/false
+ -- If true, element metadata (RFC5610 records) will not be sent.
+ -- default is false (that is, to export the RFC5610 records).
+
+ -- no_element_metadata =
+
+ -- no_template_metadata = true/false
+ -- If true, template metadata (name, description, other information) will
+ -- not be sent
+ -- default is false (that is, to export template metadata).
+
+ -- no_template_metadata =
+
+ -- ingress = ingressInterface (integer)
+ -- egress = egressInterface (integer)
+ -- use the above options to manually set the ingressInterface or
+ -- egressInterface in the exported flow record. Default is 0.
+
+ ingress = 0
+ egress = 0
+
+ -- obdomain = DOMAIN_ID (integer)
+ -- Set the othe observationDomainID on each exported IPFIX message to
+ -- DOMAIN_ID.  Default is 0.
+
+ obdomain = 0
+
+ -- maxflows = FLOW_TABLE_MAX (integer)
+ -- Limit the number of open flows to FLOW_TABLE_MAX. Default is no limit.
+
+ -- maxflows =
+
+ -- maxfrags = FRAG_TABLE_MAX (integer)
+ -- Limit the number of fragments to FRAG_TABLE_MAX. Default is no limit.
+
+ -- maxfrags =
+
+ -- udp_uniflow = PORT (integer)
+ -- If set, export each UDP packet on the given PORT (or 1 for all ports)
+ -- as a single flow. Default is 0 (off).
+ udp_uniflow = 0
+
+ -- Turn on entropy output by setting entropy = true
+ entropy = true
+
+The following options configure the passive OS fingerprinting capabilities
+in B<yaf>.  The capability must be enabled when B<yaf> is built.
+
+ -- p0fprint = true/false
+ -- p0f_fingerprints = "/usr/local/etc/p0f.fp"
+ -- fpexport = true/false
+ -- See the yaf man page for more information. YAF must be configured
+ -- appropriately to use the following options.
+
+ -- p0fprint = true
+ -- fpexport = true
+ -- p0f_fingerprints = "/usr/local/etc/p0f.fp"
+
+The following options configure support for the nDPI application labeler.
+This capabliity must be configured when B<yaf> is built.
+
+ -- nDPI OPTIONS
+ -- ndpi = true/false
+ -- ndpi_proto_file = "PATH"
+ -- See the yaf man page for more information. YAF must be configured
+ -- appropriately to use the following options.
+ -- ndpi = true
+ -- ndpi_proto_file = "LOCATION"
+
+
+=head1 AUTHORS
+
+Emily Sarneso and the CERT Engineering Team.
+
+=head1 SEE ALSO
+
+B<yaf(1)>, B<yafdpi(1)>, B<yafdhcp(1)>, B<applabel(1)>
